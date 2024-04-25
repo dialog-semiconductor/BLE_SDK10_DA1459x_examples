@@ -1,0 +1,40 @@
+diff --git a/sdk/bsp/startup/DA1459x/GCC/exception_handlers.S b/sdk/bsp/startup/DA1459x/GCC/exception_handlers.S
+index 17b67c3..e274183 100644
+--- a/sdk/bsp/startup/DA1459x/GCC/exception_handlers.S
++++ b/sdk/bsp/startup/DA1459x/GCC/exception_handlers.S
+@@ -56,6 +56,10 @@
+ #define MEMORY_QSPIR_END                        (MEMORY_QSPIR_BASE + 0x2000000UL)
+ #endif
+ 
++/* The padding is required to enable pushing items to the stack on exception entry. */
++#ifndef dg_configARMv8_MSPLIM_PADDING
++#define dg_configARMv8_MSPLIM_PADDING           (32)
++#endif
+ 
+         	.syntax	unified
+         	.arch	armv8-m.main
+@@ -77,6 +81,12 @@
+         	.globl	Wakeup_Reset_Handler
+         	.type	Wakeup_Reset_Handler, %function
+ Wakeup_Reset_Handler:
++
++				/* The MSPLIM register is not retained in sleep, we must restore it upon wakeup. */
++				ldr		r0, =__StackLimit
++				add		r0, r0, #dg_configARMv8_MSPLIM_PADDING
++				msr		msplim, r0
++
+                 /*
+                  *  Determine if this is a cold reset (e.g. POR, watchdog reset etc.) or
+                  *  a wakeup from deep sleep.
+@@ -109,6 +119,11 @@ Reset_Handler:
+                 ldr     r1, =Wakeup_Reset_Handler
+                 str     r1, [r0]
+ 
++				/* The padding is required to enable pushing items to the stack on exception entry. */
++				ldr		r0, =__StackLimit
++				add		r0, r0, #dg_configARMv8_MSPLIM_PADDING
++				msr		msplim, r0
++
+ #if (dg_configENABLE_MTB)
+                 /* MTB can be placed arbitrarily, but by default it is placed at the end of RAM */
+                 ldr     r0, =MTB_POSITION_REG

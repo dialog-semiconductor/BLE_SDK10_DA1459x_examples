@@ -6,7 +6,7 @@ The available devices in the DA1459x family are:
 
 - [DA14592](https://www.renesas.com/us/en/products/wireless-connectivity/bluetooth-low-energy)
 
-For information about the DA1459x platform and how to bring up your development kit, please refer to the [Getting started User Manual](https://lpccs-docs.renesas.com/um-b-153-da1470x_getting_started/index.html)
+For information about the DA1459x platform and how to bring up your development kit, please refer to the [Getting started User Manual](https://lpccs-docs.renesas.com/um-b-090-da1469x_getting_started/index.html)
 
 ## Example usage
 
@@ -16,9 +16,10 @@ For additional examples:
 
 - Clone this repository
 - From the workspace you have setup go to **File->Import**
-- Select **General->Existing Projects into Workspace** and click Next
+- Select **General -> Dialog SDK Projects** and click Next
 - In the `Select root directory` input the path where you cloned this repository
 - Select the example(s) you want to import and click finish.
+- A (dialog) window pops up and choose the Toolchain version 7.x and the Target Device DA14592. 
 
 You can now navigate and build the imported examples.
 
