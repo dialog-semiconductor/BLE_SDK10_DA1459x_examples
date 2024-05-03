@@ -11,6 +11,8 @@ def findProjectFiles():
 
     matches = []
     for root, dirnames, filenames in os.walk("."):
+        if root == ".":
+            continue
         for filename in fnmatch.filter(filenames, ".project"):
             matches.append(os.path.dirname(os.path.join(root, filename))[2:])
 
@@ -30,8 +32,8 @@ if __name__ == "__main__":
 
     outputDict = {"examples": [], "groups": []}
     for proj in projectFolderList:
-
-        binPath =  glob.glob( os.path.join(proj,'*-Debug_QSPI','*.bin'))
+        
+        binPath =  glob.glob( os.path.join(proj,'*-Debug_eFLASH','*.bin'))
 
         if len(binPath) != 1:
             raise FileExistsError(proj)
