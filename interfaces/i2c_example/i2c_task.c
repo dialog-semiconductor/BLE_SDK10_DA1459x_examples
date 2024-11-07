@@ -116,12 +116,17 @@ OS_TASK_FUNCTION (i2c_master_task, pvParameters )
                                                    HW_I2C_F_ADD_STOP);
 			OS_EVENT_WAIT(i2c_event, OS_EVENT_FOREVER);
 #else
-                 I2C_error_code = ad_i2c_write_read(_master_handle,
-                                                   _req,
-                                                   I2C_REQUEST_SIZE,//reduce this to simulate incomplete send
-                                                   resp,
-                                                   I2C_RESPONSE_SIZE,
-                                                   HW_I2C_F_ADD_STOP);
+            I2C_error_code = ad_i2c_write(_master_handle,
+											_req,
+											I2C_REQUEST_SIZE,
+											HW_I2C_F_ADD_STOP);
+
+            vTaskDelayUntil(&xNextWakeTime, OS_TICKS_2_MS(40)); //delay wait as per datasheet
+
+            I2C_error_code = ad_i2c_read(_master_handle,
+											 resp,
+											 I2C_RESPONSE_SIZE,
+											 HW_I2C_F_ADD_STOP);
 #endif
                         if(0 == I2C_error_code){
                                 /*
